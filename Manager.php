@@ -21,6 +21,12 @@ class Manager
      * @var string
      */
     protected $keyPrefix = '';
+    
+    /**
+     * The storage to be used by default if the manager can't find proper storage by name
+     * @var Storage\AbstractStorage|null
+     */
+    protected $defaultStorage = null;
 
     /**
      * Get storage use repository
@@ -48,8 +54,11 @@ class Manager
         } else {
             $class = '\\Floxim\\Cache\\Storage\\' . ucfirst($name);
         }
-        if ($storage = $this->createStorage($class, $params)) {
+        if ( ($storage = $this->createStorage($class, $params)) ) {
             return $this->storages[strtolower($name)] = $storage;
+        }
+        if (!is_null($this->defaultStorage)) {
+            return $this->defaultStorage;
         }
         throw new \Exception('Not found storage - ' . $class);
     }
@@ -77,6 +86,15 @@ class Manager
             return $storage;
         }
         return null;
+    }
+    
+    /**
+     * Set up the storage which will be used by default
+     * @param \Floxim\Cache\Storage\AbstractStorage $storage
+     */
+    public function setDefaultStorage(Storage\AbstractStorage $storage)
+    {
+        $this->defaultStorage = $storage;
     }
 
     /**
