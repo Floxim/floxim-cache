@@ -42,8 +42,9 @@ class Manager
         /**
          * Check repository
          */
-        if (isset($this->storages[strtolower($name)])) {
-            return $this->storages[strtolower($name)];
+        $lower_name = strtolower($name);
+        if (isset($this->storages[$lower_name])) {
+            return $this->storages[$lower_name];
         }
         /**
          * Create new storage
@@ -55,7 +56,7 @@ class Manager
             $class = '\\Floxim\\Cache\\Storage\\' . ucfirst($name);
         }
         if ( ($storage = $this->createStorage($class, $params)) ) {
-            return $this->storages[strtolower($name)] = $storage;
+            return $this->storages[$lower_name] = $storage;
         }
         if (!is_null($this->defaultStorage)) {
             return $this->defaultStorage;

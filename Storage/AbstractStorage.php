@@ -181,23 +181,23 @@ abstract class AbstractStorage implements \ArrayAccess
      * Check and save (if not exists) data in cache
      *
      * @param          $key
-     * @param          $time
      * @param callable $callback
+     * @param          $time
      * @param array $tags
-     * @param bool $use_cache
      *
      * @return mixed
      */
-    public function remember($key, $time, \Closure $callback, $tags = array(), $use_cache = true)
+    public function remember($key, \Closure $callback, $time = 0, $tags = array())
     {
-        if ($use_cache) {
-            if (false !== ($value = $this->get($key))) {
-                return $value;
-            }
-            $this->set($key, $value = $callback(), $time, $tags);
-        } else {
-            $value = $callback();
+        //if ($use_cache) {
+        if ($time === false) {
+            return $callback();
         }
+        
+        if (false !== ($value = $this->get($key))) {
+            return $value;
+        }
+        $this->set($key, $value = $callback(), $time, $tags);
         return $value;
     }
 
