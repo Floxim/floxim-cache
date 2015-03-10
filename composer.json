@@ -1,0 +1,7 @@
+{
+    "name" : "floxim/cache",
+    "description" : "Floxim Cache Manager",
+    "autoload": {
+        "psr-4": { "Floxim\\Cache\\": "" }
+    }
+}
